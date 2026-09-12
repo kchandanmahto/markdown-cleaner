@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Markdown Cleaner - Free Markdown to Plain Text Converter | CKMHTO.AI </title>
+
+    <!-- SEO -->
+
+    <meta name="description"
+        content="Free Markdown to Plain Text Converter by CKMHTO.AI. Clean Markdown formatting instantly.">
+
+    <meta name="author" content="Chandan Kumar">
+
+    <meta name="description"
+        content="Free online Markdown Cleaner and Markdown to Plain Text Converter. Remove Markdown formatting, clean text, count words and characters, copy or download clean text.">
+
+    <meta name="keywords"
+        content="markdown cleaner, markdown to plain text, markdown converter, remove markdown formatting, clean markdown, markdown text cleaner">
+
+
+    <meta name="robots" content="index, follow">
+
+    <meta name="theme-color" content="#6c5ce7">
+
+
+    <!--
+        IMPORTANT:
+        Deployment ke baad "/" ko actual domain se replace karenge.
+        Example:
+        https://yourdomain.com/
+    -->
+    <link rel="canonical" href="/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+
+    <meta property="og:title" content="Markdown Cleaner - Markdown to Plain Text">
+
+    <meta property="og:description"
+        content="Clean Markdown formatting and convert Markdown into readable plain text instantly.">
+
+    <meta property="og:url" content="/">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary">
+
+    <meta name="twitter:title" content="Markdown Cleaner">
+
+    <meta name="twitter:description" content="Free online Markdown to Plain Text Converter.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+
+<body>
+
+    <!-- ========================================
+         HEADER
+    ========================================= -->
+
+    <header class="site-header">
+
+        <div class="nav-container">
+
+            <!-- Brand -->
+            <a href="/" class="brand">
+
+                <div class="brand-icon">
+                    M
+                </div>
+
+                <span>CKMHTO.AI</span>
+
+            </a>
+
+
+            <!-- Navigation -->
+            <nav class="desktop-nav">
+
+                <a href="#home">
+                    Home
+                </a>
+
+                <a href="#features">
+                    Features
+                </a>
+
+                <a href="/docs" target="_blank" rel="noopener noreferrer">
+                    API
+                </a>
+
+                <button id="themeBtn" class="theme-btn" type="button" aria-label="Toggle dark mode"
+                    title="Toggle dark mode">
+                    🌙
+                </button>
+
+                <!--
+                    Deployment se pehle is URL ko
+                    apne actual GitHub repository URL se replace karna.
+                -->
+                <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="github-btn">
+                    GitHub
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- ========================================
+         MAIN
+    ========================================= -->
+
+    <main id="home">
+
+
+        <!-- ========================================
+             HERO
+        ========================================= -->
+
+        <section class="hero">
+
+            <div class="hero-badge">
+                ✨ Fast • Free • Simple
+            </div>
+
+            <h1>
+                Clean Markdown.
+                <span>
+                    Get Plain Text.
+                </span>
+            </h1>
+
+            <p>
+                Remove Markdown formatting and convert your text
+                into clean, readable plain text instantly.
+            </p>
+
+        </section>
+
+
+        <!-- ========================================
+             MARKDOWN CLEANER TOOL
+        ========================================= -->
+
+        <section class="tool-section">
+
+            <div class="editor-grid">
+
+
+                <!-- =================================
+                     INPUT CARD
+                ================================== -->
+
+                <div class="editor-card">
+
+                    <div class="editor-header">
+
+                        <div>
+
+                            <h2>
+                                Markdown Input
+                            </h2>
+
+                            <span>
+                                Paste or type your Markdown
+                            </span>
+
+                        </div>
+
+
+                        <label class="upload-btn">
+
+                            📁 Upload
+
+                            <input type="file" id="fileInput" accept=".md,.markdown,.txt,text/plain,text/markdown"
+                                hidden>
+
+                        </label>
+
+                    </div>
+
+
+                    <textarea id="inputText" spellcheck="false" aria-label="Markdown input"
+                        placeholder="Paste your Markdown here..."></textarea>
+
+
+                    <div class="editor-footer">
+
+                        <span id="inputCount">
+                            0 words • 0 characters
+                        </span>
+
+                        <button id="clearBtn" class="small-btn" type="button">
+                            Clear
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================
+                     OUTPUT CARD
+                ================================== -->
+
+                <div class="editor-card output-card">
+
+                    <div class="editor-header">
+
+                        <div>
+
+                            <h2>
+                                Clean Text
+                            </h2>
+
+                            <span>
+                                Your clean text will appear here
+                            </span>
+
+                        </div>
+
+
+                        <button id="copyBtn" class="copy-btn" type="button">
+                            📋 Copy
+                        </button>
+
+                    </div>
+
+
+                    <textarea id="outputText" aria-label="Clean text output"
+                        placeholder="Clean text will appear here..." readonly></textarea>
+
+
+                    <div class="editor-footer">
+
+                        <span id="outputCount">
+                            0 words • 0 characters
+                        </span>
+
+
+                        <button id="downloadBtn" class="small-btn" type="button">
+                            ⬇ Download
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CLEAN BUTTON -->
+
+            <div class="clean-action">
+
+                <button id="cleanBtn" type="button">
+                    ✨ Clean Markdown
+                </button>
+
+            </div>
+
+
+            <!-- STATUS MESSAGE -->
+
+            <div id="message" class="message" aria-live="polite"></div>
+
+        </section>
+
+
+        <!-- ========================================
+             FEATURES
+        ========================================= -->
+
+        <section id="features" class="features-section">
+
+            <div class="section-heading">
+
+                <span>
+                    POWERFUL &amp; SIMPLE
+                </span>
+
+                <h2>
+                    Everything you need to clean text
+                </h2>
+
+                <p>
+                    A lightweight Markdown cleaning tool
+                    designed for speed and simplicity.
+                </p>
+
+            </div>
+
+
+            <div class="feature-grid">
+
+
+                <!-- Feature 1 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        ✨
+                    </div>
+
+                    <h3>
+                        Remove Formatting
+                    </h3>
+
+                    <p>
+                        Remove headings, bold, italic,
+                        code formatting and other Markdown syntax.
+                    </p>
+
+                </div>
+
+
+                <!-- Feature 2 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        Clean Links
+                    </h3>
+
+                    <p>
+                        Convert Markdown links into clean,
+                        readable link text.
+                    </p>
+
+                </div>
+
+
+                <!-- Feature 3 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Text Statistics
+                    </h3>
+
+                    <p>
+                        Instantly see word count and
+                        character count for your text.
+                    </p>
+
+                </div>
+
+
+                <!-- Feature 4 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        File Support
+                    </h3>
+
+                    <p>
+                        Upload Markdown or text files
+                        and clean them directly in your browser.
+                    </p>
+
+                </div>
+
+
+                <!-- Feature 5 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        One Click Copy
+                    </h3>
+
+                    <p>
+                        Copy your cleaned text instantly
+                        with one click.
+                    </p>
+
+                </div>
+
+
+                <!-- Feature 6 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🌙
+                    </div>
+
+                    <h3>
+                        Dark Mode
+                    </h3>
+
+                    <p>
+                        Switch between light and dark themes
+                        for a comfortable experience.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================
+             INFORMATION / SEO CONTENT
+        ========================================= -->
+
+        <section class="info-section">
+
+            <div class="info-content">
+
+                <span class="section-label">
+                    MARKDOWN TOOL
+                </span>
+
+                <h2>
+                    Free Markdown to Plain Text Converter
+                </h2>
+
+                <p>
+                    Markdown Cleaner is a simple online tool
+                    for converting Markdown formatted content
+                    into clean plain text.
+                </p>
+
+                <p>
+                    It can remove common Markdown formatting
+                    such as headings, bold text, italic text,
+                    lists, links, blockquotes and code formatting.
+                </p>
+
+                <p>
+                    Whether you are working with documentation,
+                    AI-generated content, notes, README files
+                    or text copied from GitHub, this tool helps
+                    you quickly create clean readable text.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ========================================
+     FOOTER
+======================================== -->
+
+    <footer class="site-footer">
+
+        <div class="footer-container">
+
+
+            <!-- Footer Brand -->
+
+            <div class="footer-brand">
+
+                <a href="/" class="brand">
+
+                    <div class="brand-icon">
+                        M
+                    </div>
+
+                    <span>
+                        CKMHTO.AI
+                    </span>
+
+                </a>
+
+
+                <p>
+                    Markdown Cleaner is a simple,
+                    fast and free tool for converting
+                    Markdown into clean plain text.
+                </p>
+
+
+                <p>
+                    Built &amp; Designed with ❤️ by
+                    <strong>Chandan Kumar</strong>
+                </p>
+
+            </div>
+
+
+
+            <!-- Tool Links -->
+
+            <div class="footer-links">
+
+                <h3>
+                    Tool
+                </h3>
+
+
+                <a href="#home">
+                    Markdown Cleaner
+                </a>
+
+
+                <a href="#features">
+                    Features
+                </a>
+
+
+                <a href="/docs" target="_blank" rel="noopener noreferrer">
+                    API Documentation
+                </a>
+
+            </div>
+
+
+
+            <!-- Resource Links -->
+
+            <div class="footer-links">
+
+                <h3>
+                    Resources
+                </h3>
+
+
+                <a href="/robots.txt" target="_blank" rel="noopener noreferrer">
+                    Robots.txt
+                </a>
+
+
+                <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer">
+                    Sitemap
+                </a>
+
+
+                <a href="https://github.com/kchandanmahto" target="_blank" rel="noopener noreferrer">
+                    GitHub Profile
+                </a>
+
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+        <!-- Footer Bottom -->
+
+        <div class="footer-bottom">
+
+
+            <span>
+                © 2026 CKMHTO.AI
+            </span>
+
+
+            <span>
+                Markdown Cleaner
+            </span>
+
+
+            <span>
+                Built with Python &amp; FastAPI
+            </span>
+
+
+            <span>
+                Made with ❤️ by Chandan Kumar
+            </span>
+
+
+        </div>
+
+    </footer>
+
+    <!-- ========================================
+         TOAST NOTIFICATION
+    ========================================= -->
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+
+    <!-- JavaScript -->
+    <script src="/script.js"></script>
+
+</body>
+
+</html>
