@@ -1,27 +1,74 @@
-# ✨ Markdown Cleaner
+# ✨ CKMHTO.AI — Free Online Tools
 
-**Markdown Cleaner** is a fast, simple, and free web tool that converts Markdown content into clean, readable plain text.
+A simple, fast and privacy-friendly collection of free online tools built by **Chandan Kumar** under the **CKMHTO.AI** brand.
 
-Built with **Python + FastAPI + HTML + CSS + JavaScript** and packaged with **Docker**.
+The project currently includes a Markdown Cleaner and image conversion tools, with more useful utilities planned for the future.
 
-🔗 **Project:** CKMHTO.AI  
-👨‍💻 **Built & Designed by:** Chandan Kumar
+---
 
+## 🌐 Live Website
 
-## 🚀 Features
+**Markdown Cleaner**
 
-- Convert Markdown to plain text
-- Remove headings, bold, italic and formatting
-- Clean Markdown links and images
-- Remove ordered and unordered list markers
-- Remove blockquotes and code formatting
-- Upload `.md`, `.markdown` and `.txt` files
-- Copy cleaned text
-- Download cleaned text
-- Word and character counter
-- Light / Dark mode
-- FastAPI REST API
-- Docker support
-- No database required
+https://markdowncleaner.duckdns.org
 
+---
 
+## 🚀 Available Tools
+
+### 📝 Markdown Cleaner
+
+Convert Markdown content into clean, readable plain text.
+
+**Supports:**
+
+- Headings
+- Bold text
+- Italic text
+- Links
+- Images
+- Lists
+- Blockquotes
+- Inline code
+- Code blocks
+- Markdown symbols
+
+### 🖼️ Image Tools
+
+Current image tool:
+
+- JPEG → JPG
+
+Planned tools:
+
+- JPG → JPEG
+- JPG → PNG
+- PNG → JPG
+- WebP Converter
+- GIF Converter
+- Image Compressor
+- Image Resizer
+
+More tools will be added over time.
+
+---
+
+## ✨ Features
+
+- ⚡ Fast and lightweight
+- 🔒 Privacy-friendly
+- 📝 Markdown to Plain Text conversion
+- 🖼️ Image conversion
+- 📁 Markdown/Text file upload
+- 📋 Copy cleaned text
+- ⬇️ Download cleaned text
+- 🔢 Word and character counter
+- 🌙 Dark mode
+- 📱 Responsive design
+- 🔌 REST API
+- 📚 Interactive API documentation
+- 🐳 Docker support
+- ☁️ AWS deployment ready
+- 🔄 GitHub Actions deployment support
+
+---
