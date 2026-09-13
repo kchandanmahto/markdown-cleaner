@@ -1,0 +1,38 @@
+name: Deploy Markdown Cleaner to AWS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to AWS EC2
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /opt/markdown-cleaner
+
+            git pull origin main
+
+            sudo docker stop markdown-cleaner || true
+            sudo docker rm markdown-cleaner || true
+
+            sudo docker build -t markdown-cleaner .
+
+            sudo docker run -d \
+              --restart unless-stopped \
+              -p 127.0.0.1:8000:8000 \
+              --name markdown-cleaner \
+              markdown-cleaner
+
+            sudo systemctl reload nginx
+
+            sudo docker ps
