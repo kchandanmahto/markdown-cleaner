@@ -7,14 +7,14 @@ venv/
 .venv/
 env/
 
-.env
-.env.*
-
 .git/
-.gitignore
+.github/
 
 .vscode/
 .idea/
+
+.env
+.env.*
 
 .pytest_cache/
 .coverage

@@ -1,9 +1,10 @@
 "use strict";
 
+/* =========================================================
+   CKMHTO.AI — ELEMENTS
+========================================================= */
 
-/* ========================================
-   ELEMENTS
-======================================== */
+/* Markdown */
 
 const inputText = document.getElementById("inputText");
 const outputText = document.getElementById("outputText");
@@ -23,33 +24,59 @@ const toast = document.getElementById("toast");
 const themeBtn = document.getElementById("themeBtn");
 
 
-/* ========================================
-   CHECK REQUIRED ELEMENTS
-======================================== */
+/* Image Converter */
 
-if (
-    !inputText ||
-    !outputText ||
-    !cleanBtn ||
-    !copyBtn ||
-    !clearBtn ||
-    !downloadBtn ||
-    !fileInput ||
-    !inputCount ||
-    !outputCount ||
-    !message ||
-    !toast ||
-    !themeBtn
-) {
-    console.error(
-        "Markdown Cleaner: Required HTML element is missing."
-    );
-}
+const jpegFileInput =
+    document.getElementById("jpegFileInput");
+
+const imageDropZone =
+    document.getElementById("imageDropZone");
+
+const imagePreviewArea =
+    document.getElementById("imagePreviewArea");
+
+const imagePreview =
+    document.getElementById("imagePreview");
+
+const imageFileName =
+    document.getElementById("imageFileName");
+
+const imageFileSize =
+    document.getElementById("imageFileSize");
+
+const convertJpgBtn =
+    document.getElementById("convertJpgBtn");
+
+const removeImageBtn =
+    document.getElementById("removeImageBtn");
+
+const imageResultArea =
+    document.getElementById("imageResultArea");
+
+const convertedImageInfo =
+    document.getElementById("convertedImageInfo");
+
+const downloadJpgBtn =
+    document.getElementById("downloadJpgBtn");
+
+const convertAnotherBtn =
+    document.getElementById("convertAnotherBtn");
 
 
-/* ========================================
-   WORD COUNT
-======================================== */
+/* =========================================================
+   STATE
+========================================================= */
+
+let selectedImageFile = null;
+
+let convertedImageUrl = null;
+
+let toastTimer = null;
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function getWordCount(text) {
 
@@ -63,9 +90,23 @@ function getWordCount(text) {
 }
 
 
-/* ========================================
-   INPUT STATISTICS
-======================================== */
+function formatFileSize(bytes) {
+
+    if (bytes < 1024) {
+        return `${bytes} B`;
+    }
+
+    if (bytes < 1024 * 1024) {
+        return `${(bytes / 1024).toFixed(1)} KB`;
+    }
+
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+
+/* =========================================================
+   MARKDOWN STATISTICS
+========================================================= */
 
 function updateInputStats() {
 
@@ -84,10 +125,6 @@ function updateInputStats() {
 }
 
 
-/* ========================================
-   OUTPUT STATISTICS
-======================================== */
-
 function updateOutputStats() {
 
     if (!outputText || !outputCount) {
@@ -105,12 +142,9 @@ function updateOutputStats() {
 }
 
 
-/* ========================================
-   TOAST MESSAGE
-======================================== */
-
-let toastTimer = null;
-
+/* =========================================================
+   TOAST
+========================================================= */
 
 function showToast(text) {
 
@@ -132,9 +166,9 @@ function showToast(text) {
 }
 
 
-/* ========================================
+/* =========================================================
    STATUS MESSAGE
-======================================== */
+========================================================= */
 
 function showMessage(text) {
 
@@ -146,9 +180,9 @@ function showMessage(text) {
 }
 
 
-/* ========================================
-   INPUT EVENT
-======================================== */
+/* =========================================================
+   MARKDOWN INPUT
+========================================================= */
 
 if (inputText) {
 
@@ -160,9 +194,9 @@ if (inputText) {
 }
 
 
-/* ========================================
+/* =========================================================
    CLEAN MARKDOWN
-======================================== */
+========================================================= */
 
 if (cleanBtn) {
 
@@ -178,8 +212,6 @@ if (cleanBtn) {
                 inputText.value.trim();
 
 
-            /* Empty input */
-
             if (!text) {
 
                 showToast(
@@ -189,8 +221,6 @@ if (cleanBtn) {
                 return;
             }
 
-
-            /* Loading */
 
             cleanBtn.disabled = true;
 
@@ -213,9 +243,10 @@ if (cleanBtn) {
                                     "application/json"
                             },
 
-                            body: JSON.stringify({
-                                text: text
-                            })
+                            body:
+                                JSON.stringify({
+                                    text: text
+                                })
                         }
                     );
 
@@ -285,9 +316,9 @@ if (cleanBtn) {
 }
 
 
-/* ========================================
+/* =========================================================
    COPY
-======================================== */
+========================================================= */
 
 if (copyBtn) {
 
@@ -332,14 +363,9 @@ if (copyBtn) {
 
                     outputText.select();
 
-                    document.execCommand(
-                        "copy"
-                    );
+                    document.execCommand("copy");
 
-                    outputText.setSelectionRange(
-                        0,
-                        0
-                    );
+                    outputText.setSelectionRange(0, 0);
 
                 }
 
@@ -369,9 +395,9 @@ if (copyBtn) {
 }
 
 
-/* ========================================
-   CLEAR
-======================================== */
+/* =========================================================
+   CLEAR MARKDOWN
+========================================================= */
 
 if (clearBtn) {
 
@@ -396,8 +422,6 @@ if (clearBtn) {
             showMessage("");
 
 
-            /* Reset file input */
-
             if (fileInput) {
                 fileInput.value = "";
             }
@@ -413,9 +437,9 @@ if (clearBtn) {
 }
 
 
-/* ========================================
-   DOWNLOAD
-======================================== */
+/* =========================================================
+   DOWNLOAD CLEAN TEXT
+========================================================= */
 
 if (downloadBtn) {
 
@@ -489,9 +513,9 @@ if (downloadBtn) {
 }
 
 
-/* ========================================
-   FILE UPLOAD
-======================================== */
+/* =========================================================
+   MARKDOWN FILE UPLOAD
+========================================================= */
 
 if (fileInput) {
 
@@ -582,9 +606,569 @@ if (fileInput) {
 }
 
 
-/* ========================================
+/* =========================================================
+   IMAGE VALIDATION
+========================================================= */
+
+function isValidImage(file) {
+
+    if (!file) {
+        return false;
+    }
+
+    const validTypes = [
+        "image/jpeg"
+    ];
+
+    const validExtensions = [
+        ".jpeg",
+        ".jpg"
+    ];
+
+    const fileName =
+        file.name.toLowerCase();
+
+    const hasValidExtension =
+        validExtensions.some(
+            extension =>
+                fileName.endsWith(extension)
+        );
+
+    return (
+        validTypes.includes(file.type) ||
+        hasValidExtension
+    );
+}
+
+
+/* =========================================================
+   RESET IMAGE CONVERTER
+========================================================= */
+
+function resetImageConverter() {
+
+    selectedImageFile = null;
+
+
+    if (convertedImageUrl) {
+
+        URL.revokeObjectURL(
+            convertedImageUrl
+        );
+
+        convertedImageUrl = null;
+    }
+
+
+    if (jpegFileInput) {
+        jpegFileInput.value = "";
+    }
+
+
+    if (imagePreview) {
+        imagePreview.removeAttribute("src");
+    }
+
+
+    if (imageFileName) {
+        imageFileName.textContent =
+            "Image";
+    }
+
+
+    if (imageFileSize) {
+        imageFileSize.textContent =
+            "0 KB";
+    }
+
+
+    if (imagePreviewArea) {
+        imagePreviewArea.hidden = true;
+    }
+
+
+    if (imageResultArea) {
+        imageResultArea.hidden = true;
+    }
+
+
+    if (imageDropZone) {
+        imageDropZone.hidden = false;
+    }
+
+
+    if (downloadJpgBtn) {
+        downloadJpgBtn.removeAttribute("href");
+    }
+
+
+    if (convertedImageInfo) {
+        convertedImageInfo.textContent =
+            "Your JPG image is ready.";
+    }
+
+}
+
+
+/* =========================================================
+   SELECT IMAGE
+========================================================= */
+
+function selectImage(file) {
+
+    if (!file) {
+        return;
+    }
+
+
+    if (!isValidImage(file)) {
+
+        showToast(
+            "❌ Please select a JPEG or JPG image."
+        );
+
+        return;
+    }
+
+
+    /*
+     * Limit browser-side input size.
+     * This keeps very large files from
+     * consuming excessive memory.
+     */
+
+    const maxSize =
+        20 * 1024 * 1024;
+
+
+    if (file.size > maxSize) {
+
+        showToast(
+            "❌ Image must be smaller than 20 MB."
+        );
+
+        return;
+    }
+
+
+    selectedImageFile = file;
+
+
+    if (convertedImageUrl) {
+
+        URL.revokeObjectURL(
+            convertedImageUrl
+        );
+
+        convertedImageUrl = null;
+    }
+
+
+    const previewUrl =
+        URL.createObjectURL(file);
+
+
+    if (imagePreview) {
+
+        imagePreview.src =
+            previewUrl;
+
+    }
+
+
+    if (imageFileName) {
+
+        imageFileName.textContent =
+            file.name;
+
+    }
+
+
+    if (imageFileSize) {
+
+        imageFileSize.textContent =
+            formatFileSize(file.size);
+
+    }
+
+
+    if (imageDropZone) {
+        imageDropZone.hidden = true;
+    }
+
+
+    if (imageResultArea) {
+        imageResultArea.hidden = true;
+    }
+
+
+    if (imagePreviewArea) {
+        imagePreviewArea.hidden = false;
+    }
+
+
+    showToast(
+        `✓ ${file.name} selected`
+    );
+
+}
+
+
+/* =========================================================
+   JPEG FILE INPUT
+========================================================= */
+
+if (jpegFileInput) {
+
+    jpegFileInput.addEventListener(
+        "change",
+        event => {
+
+            const file =
+                event.target.files[0];
+
+            selectImage(file);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DRAG & DROP
+========================================================= */
+
+if (imageDropZone) {
+
+    [
+        "dragenter",
+        "dragover"
+    ].forEach(eventName => {
+
+        imageDropZone.addEventListener(
+            eventName,
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                imageDropZone.classList.add(
+                    "dragover"
+                );
+
+            }
+        );
+
+    });
+
+
+    [
+        "dragleave",
+        "drop"
+    ].forEach(eventName => {
+
+        imageDropZone.addEventListener(
+            eventName,
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                imageDropZone.classList.remove(
+                    "dragover"
+                );
+
+            }
+        );
+
+    });
+
+
+    imageDropZone.addEventListener(
+        "drop",
+        event => {
+
+            const file =
+                event.dataTransfer.files[0];
+
+            selectImage(file);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   JPEG → JPG CONVERSION
+========================================================= */
+
+async function convertToJpg() {
+
+    if (!selectedImageFile) {
+
+        showToast(
+            "❌ Please select an image first."
+        );
+
+        return;
+    }
+
+
+    if (!convertJpgBtn) {
+        return;
+    }
+
+
+    convertJpgBtn.disabled = true;
+
+    convertJpgBtn.textContent =
+        "Converting...";
+
+
+    try {
+
+        /*
+         * Create an image from the selected file.
+         */
+
+        const image =
+            new Image();
+
+
+        const imageUrl =
+            URL.createObjectURL(
+                selectedImageFile
+            );
+
+
+        await new Promise(
+            (resolve, reject) => {
+
+                image.onload = resolve;
+
+                image.onerror = reject;
+
+                image.src = imageUrl;
+
+            }
+        );
+
+
+        /*
+         * Canvas converts the image
+         * into a real JPEG/JPG Blob.
+         */
+
+        const canvas =
+            document.createElement("canvas");
+
+
+        canvas.width =
+            image.naturalWidth;
+
+        canvas.height =
+            image.naturalHeight;
+
+
+        const context =
+            canvas.getContext("2d");
+
+
+        if (!context) {
+
+            throw new Error(
+                "Canvas is not supported."
+            );
+
+        }
+
+
+        context.drawImage(
+            image,
+            0,
+            0
+        );
+
+
+        const jpgBlob =
+            await new Promise(
+                resolve =>
+                    canvas.toBlob(
+                        resolve,
+                        "image/jpeg",
+                        0.95
+                    )
+            );
+
+
+        URL.revokeObjectURL(imageUrl);
+
+
+        if (!jpgBlob) {
+
+            throw new Error(
+                "Unable to create JPG."
+            );
+
+        }
+
+
+        convertedImageUrl =
+            URL.createObjectURL(
+                jpgBlob
+            );
+
+
+        const originalSize =
+            formatFileSize(
+                selectedImageFile.size
+            );
+
+
+        const convertedSize =
+            formatFileSize(
+                jpgBlob.size
+            );
+
+
+        const originalName =
+            selectedImageFile.name
+                .replace(
+                    /\.(jpeg|jpg)$/i,
+                    ""
+                );
+
+
+        const outputName =
+            `${originalName}.jpg`;
+
+
+        if (downloadJpgBtn) {
+
+            downloadJpgBtn.href =
+                convertedImageUrl;
+
+            downloadJpgBtn.download =
+                outputName;
+
+        }
+
+
+        if (convertedImageInfo) {
+
+            convertedImageInfo.textContent =
+                `${originalSize} → ${convertedSize} • ${outputName}`;
+
+        }
+
+
+        if (imagePreviewArea) {
+            imagePreviewArea.hidden = true;
+        }
+
+
+        if (imageResultArea) {
+            imageResultArea.hidden = false;
+        }
+
+
+        showToast(
+            "✓ JPG conversion completed!"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "JPEG to JPG error:",
+            error
+        );
+
+
+        showToast(
+            "❌ Unable to convert this image."
+        );
+
+    }
+
+    finally {
+
+        convertJpgBtn.disabled = false;
+
+        convertJpgBtn.textContent =
+            "🔄 Convert to JPG";
+
+    }
+
+}
+
+
+/* =========================================================
+   CONVERT BUTTON
+========================================================= */
+
+if (convertJpgBtn) {
+
+    convertJpgBtn.addEventListener(
+        "click",
+        convertToJpg
+    );
+
+}
+
+
+/* =========================================================
+   REMOVE IMAGE
+========================================================= */
+
+if (removeImageBtn) {
+
+    removeImageBtn.addEventListener(
+        "click",
+        () => {
+
+            resetImageConverter();
+
+            showToast(
+                "✓ Image removed."
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CONVERT ANOTHER
+========================================================= */
+
+if (convertAnotherBtn) {
+
+    convertAnotherBtn.addEventListener(
+        "click",
+        () => {
+
+            resetImageConverter();
+
+            if (jpegFileInput) {
+                jpegFileInput.click();
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
    DARK MODE
-======================================== */
+========================================================= */
 
 function setTheme(theme) {
 
@@ -599,8 +1183,10 @@ function setTheme(theme) {
             "dark"
         );
 
+
         themeBtn.textContent =
             "☀️";
+
 
         themeBtn.setAttribute(
             "aria-label",
@@ -615,8 +1201,10 @@ function setTheme(theme) {
             "dark"
         );
 
+
         themeBtn.textContent =
             "🌙";
+
 
         themeBtn.setAttribute(
             "aria-label",
@@ -634,9 +1222,9 @@ function setTheme(theme) {
 }
 
 
-/* ========================================
+/* =========================================================
    THEME BUTTON
-======================================== */
+========================================================= */
 
 if (themeBtn) {
 
@@ -662,9 +1250,9 @@ if (themeBtn) {
 }
 
 
-/* ========================================
+/* =========================================================
    LOAD SAVED THEME
-======================================== */
+========================================================= */
 
 const savedTheme =
     localStorage.getItem(
@@ -685,19 +1273,39 @@ else {
 }
 
 
-/* ========================================
-   INITIAL STATISTICS
-======================================== */
+/* =========================================================
+   INITIAL STATS
+========================================================= */
 
 updateInputStats();
 
 updateOutputStats();
 
 
-/* ========================================
+/* =========================================================
+   CLEANUP
+========================================================= */
+
+window.addEventListener(
+    "beforeunload",
+    () => {
+
+        if (convertedImageUrl) {
+
+            URL.revokeObjectURL(
+                convertedImageUrl
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
    CONSOLE
-======================================== */
+========================================================= */
 
 console.log(
-    "✓ Markdown Cleaner JavaScript loaded successfully."
+    "✓ CKMHTO.AI tools JavaScript loaded successfully."
 );
